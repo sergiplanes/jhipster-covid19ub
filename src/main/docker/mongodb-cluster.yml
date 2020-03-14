@@ -1,0 +1,16 @@
+version: '2'
+services:
+  covid19ub-mongodb:
+    image: mongo:4.2.3
+    ports:
+      - '27017:27017'
+    command: mongos --configdb covid19ub-mongodb-config
+  covid19ub-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  covid19ub-mongodb-config:
+    image: mongo:4.2.3
+    container_name: covid19ub-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
